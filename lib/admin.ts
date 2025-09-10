@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 const COOKIE = 'spektr_admin';
 
@@ -6,6 +7,10 @@ export function isAdminAuthed() {
   const c = cookies().get(COOKIE)?.value;
   if (!c) return false;
   return c === 'ok';
+}
+
+export function requireAdmin() {
+  if (!isAdminAuthed()) redirect('/admin');
 }
 
 export function adminLoginResponse() {
