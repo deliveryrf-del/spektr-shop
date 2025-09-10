@@ -1,11 +1,19 @@
-import { adminLoginResponse } from '@/lib/admin';
+import { cookies } from 'next/headers';
 
 export async function POST(req: Request) {
-  const form = await req.formData();
-  const email = String(form.get('email') || '');
-  const password = String(form.get('password') || '');
-  if (email === (process.env.ADMIN_EMAIL || '') && password === (process.env.ADMIN_PASSWORD || '')) {
-    return adminLoginResponse();
+  const { email, password } = await req.json();
+  if (
+    email === process.env.ADMIN_EMAIL &&
+    password === process.env.ADMIN_PASSWORD
+  ) {
+    cookies().set('spektr_admin', '1', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 8,
+    });
+    return Response.json({ ok: true });
   }
-  return new Response(JSON.stringify({ error: 'invalid_credentials' }), { status: 401 });
+  return Response.json({ error: 'invalid_credentials' }, { status: 401 });
 }

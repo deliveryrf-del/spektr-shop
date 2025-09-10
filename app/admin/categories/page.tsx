@@ -1,10 +1,10 @@
 import { prisma } from '@/lib/db';
-import { isAdminAuthed } from '@/lib/admin';
+import { requireAdmin } from '@/lib/admin';
 
 export const dynamic = 'force-dynamic';
 
 export default async function CategoriesAdmin() {
-  if (!isAdminAuthed()) return <div>Не авторизованы. <a href="/admin">Войти</a></div>;
+  await requireAdmin();
   const cats = await prisma.category.findMany({ orderBy:{ title:'asc' } });
 
   return (
