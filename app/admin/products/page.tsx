@@ -1,10 +1,10 @@
 import { prisma } from '@/lib/db';
-import { isAdminAuthed } from '@/lib/admin';
+import { requireAdmin } from '@/lib/admin';
 
 export const dynamic = 'force-dynamic';
 
 export default async function ProductsAdmin() {
-  if (!isAdminAuthed()) return <div>Не авторизованы. <a href="/admin">Войти</a></div>;
+  await requireAdmin();
   const products = await prisma.product.findMany({ orderBy:{ createdAt:'desc' } });
 
   return (
