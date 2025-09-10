@@ -34,9 +34,21 @@ npm run dev
 
 Откройте http://localhost:3000 — увидите главную и каталог.
 
+### Запуск в Codex
+В среде Codex база Postgres доступна сразу.
+
+```bash
+cp .env.example .env
+npm ci
+npx prisma generate
+npx prisma migrate dev --name init
+npm run seed
+npm run dev
+```
+
 ## 2) Что уже есть
 - **Каталог и карточка товара** (`/katalog`, `/katalog/[slug]`)
-- **Модели БД**: товары, категории, заказы, склад (мультисклад), резервы, тикеты ТП
+- **Модели БД**: категории, товары, заказы
 - **SEO**: `sitemap.ts`, `robots.ts`, Product JSON‑LD
 - **Счёт (PDF)**: `/api/invoice`
 - **YooKassa**: `/api/payments/yookassa/create` (инициация), `/api/payments/yookassa/webhook` (вебхук)
